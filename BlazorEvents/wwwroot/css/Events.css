@@ -1,0 +1,54 @@
+﻿.dot {
+    --bgval: 127;
+    --bgcolor: hsl(var(--bgval),50%,100%);
+    --bgcolor2: hsl(var(--bgval),80%,34%);
+    border-radius: 50%;
+    background-color: var(--bgcolor, #bada55);
+    background-image: radial-gradient(farthest-corner at 40px 40px, var(--bgcolor) 0%, var(--bgcolor) 10%, var(--bgcolor2) 100%);
+    border-color: #000;
+    border-width: 15px;
+    width: 130px;
+    height: 130px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    margin-right: 10px;
+    margin-bottom: 10px;
+}
+
+.dot0 {
+    animation: FLASH0 200ms ease;
+}
+
+.dot1 {
+    animation: FLASH1 200ms ease;
+}
+
+@keyframes FLASH0 {
+    0% {
+        --bgcolor2: hsl(var(--bgval),80%,34%);
+    }
+
+    50% {
+        --bgcolor2: hsl(var(--bgval),100%,999%);
+    }
+
+    100% {
+        --bgcolor2: hsl(var(--bgval),80%,34%);
+    }
+}
+
+@keyframes FLASH1 {
+    0% {
+        --bgcolor2: hsl(var(--bgval),80%,34%);
+    }
+
+    50% {
+        --bgcolor2: hsl(var(--bgval),100%,999%);
+    }
+
+    100% {
+        --bgcolor2: hsl(var(--bgval),80%,34%);
+    }
+}

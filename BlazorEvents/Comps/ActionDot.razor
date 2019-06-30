@@ -1,0 +1,68 @@
+@inherits ActionValue<int>
+@implements IDisposable
+
+<div class="dot dot@(clickCount % 2)" @onclick="@Clicked" style="--bgval:@Value;">
+    <span class="badge badge-dark">Action&lt;int&gt;</span>
+    @if (ShowStats)
+    {
+        <span class="badge badge-info">Should Render : @shouldRender</span>
+        <span class="badge badge-danger">Did Render : @actualRender</span>
+        <span class="badge badge-primary">Clicked : @clickCount</span>
+    }
+</div>
+
+@code {
+
+    [Inject] StatsState statsState { get; set; }
+    [Inject] BlazorEvents.Comps.AppState appState { get; set; }
+
+    [Parameter] protected bool ShowStats { get; set; }
+
+    bool workLoad;
+    int shouldRender;
+    int actualRender;
+    int clickCount;
+    Random rng = new Random();
+
+    protected Task Clicked(UIMouseEventArgs args)
+    {
+        clickCount++;
+        Value = Value + 1;
+        return Task.CompletedTask;
+    }
+    protected override void OnInit()
+    {
+        base.OnInit();
+        appState.GotNewState += AppStateChanged;
+    }
+    void AppStateChanged(object sender, EventArgs args)
+    {
+        workLoad = appState.UseWorkload;
+    }
+    protected override void OnAfterRender()
+    {
+        base.OnAfterRender();
+        actualRender++;
+        statsState.DidRender();
+    }
+    protected override bool ShouldRender()
+    {
+        shouldRender++;
+        statsState.ShouldRender();
+        return base.ShouldRender();
+    }
+    protected override async Task OnParametersSetAsync()
+    {
+        if (workLoad)
+        {
+            await Task.Delay(rng.Next(1000));
+        }
+
+        await base.OnParametersSetAsync();
+    }
+    public void Dispose()
+    {
+        appState.GotNewState -= AppStateChanged;
+
+    }
+}

@@ -1,0 +1,27 @@
+<label>Simulated workload: @workLoad</label>
+<button class="btn btn-primary" @onclick="@Toggle">Toggle Simulated Workload</button>
+
+@code {
+    [Inject] BlazorEvents.Comps.StatsState statsState { get; set; }
+    [Inject] BlazorEvents.Comps.AppState appState { get; set; }
+
+    bool workLoad;
+
+    void Toggle(UIMouseEventArgs a)
+    {
+        workLoad = !workLoad;
+        appState.SetUseWorkload(workLoad);
+    }
+
+    protected override bool ShouldRender()
+    {
+        statsState?.ShouldRender();
+        return base.ShouldRender();
+    }
+
+    protected override void OnAfterRender()
+    {
+        base.OnAfterRender();
+        statsState?.DidRender();
+    }
+}

@@ -1,0 +1,26 @@
+@implements IDisposable
+
+<h3>Calls to ShouldRender: @ShouldRenderCount</h3>
+<h3>Calls to Render: @DidRenderCount</h3>
+
+@code {
+[Inject] StatsState state { get; set; }
+
+private int ShouldRenderCount => state?.ShouldRenderCount ?? 0;
+private int DidRenderCount => state?.DidRenderCount ?? 0;
+
+protected override void OnInit()
+{
+    base.OnInit();
+    state.GotNewStats += ReRender;
+}
+
+public void Dispose()
+{
+    state.GotNewStats -= ReRender;
+}
+void ReRender(object sender, EventArgs args)
+{
+    Invoke(StateHasChanged);
+}
+}
