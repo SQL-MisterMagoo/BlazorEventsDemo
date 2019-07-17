@@ -1,23 +1,26 @@
+@* 
+    Renders a circular component whose ValueChanged event is Action-based
+    Can optionally display its own Render stats
+    When clicked it increments its bound Value and raises ValueChanged
+    It uses an Injected AppState to respond to requests to perform a dummy workload 
+    and/or whether it should display Stats
+*@
 @inherits ActionValue<int>
 @implements IDisposable
-
 <div class="dot dot@(clickCount % 2)" @onclick="@Clicked" style="--bgval:@Value;">
-    <span class="badge badge-dark">Action&lt;int&gt;</span>
-    @if (ShowStats)
+    <span class="badge badge-dark">Action</span>
+    @if (displayStats)
     {
         <span class="badge badge-info">Should Render : @shouldRender</span>
         <span class="badge badge-danger">Did Render : @actualRender</span>
         <span class="badge badge-primary">Clicked : @clickCount</span>
     }
 </div>
-
 @code {
 
-    [Inject] StatsState statsState { get; set; }
-    [Inject] BlazorEvents.Comps.AppState appState { get; set; }
+    [Inject] AppState appState { get; set; }
 
-    [Parameter] protected bool ShowStats { get; set; }
-
+    bool displayStats;
     bool workLoad;
     int shouldRender;
     int actualRender;
@@ -35,30 +38,39 @@
         base.OnInit();
         appState.GotNewState += AppStateChanged;
     }
-    void AppStateChanged(object sender, EventArgs args)
+    void AppStateChanged(object sender, AppStateNames name)
     {
-        workLoad = appState.UseWorkload;
+        switch (name)
+        {
+            case AppStateNames.WorkLoad:
+                workLoad = (bool)appState.GetValue(AppStateNames.WorkLoad);
+                break;
+            case AppStateNames.DisplayStats:
+                displayStats = (bool)appState.GetValue(AppStateNames.DisplayStats);
+                Invoke(StateHasChanged);
+                break;
+            default:
+                break;
+        }
     }
+
     protected override void OnAfterRender()
     {
         base.OnAfterRender();
         actualRender++;
-        statsState.DidRender();
     }
     protected override bool ShouldRender()
     {
         shouldRender++;
-        statsState.ShouldRender();
         return base.ShouldRender();
     }
     protected override async Task OnParametersSetAsync()
     {
+        await base.OnParametersSetAsync();
         if (workLoad)
         {
             await Task.Delay(rng.Next(1000));
         }
-
-        await base.OnParametersSetAsync();
     }
     public void Dispose()
     {

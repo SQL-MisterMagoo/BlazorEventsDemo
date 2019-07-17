@@ -1,26 +1,36 @@
+@* 
+    This component simply listens for updates to the StatsState and displays them    
+*@
 @implements IDisposable
+@inherits ComponentBase
 
 <h3>Calls to ShouldRender: @ShouldRenderCount</h3>
 <h3>Calls to Render: @DidRenderCount</h3>
 
 @code {
-[Inject] StatsState state { get; set; }
+    [Inject] StatsState state { get; set; }
 
-private int ShouldRenderCount => state?.ShouldRenderCount ?? 0;
-private int DidRenderCount => state?.DidRenderCount ?? 0;
+    private int ShouldRenderCount => state?.ShouldRenderCount ?? 0;
+    private int DidRenderCount => state?.DidRenderCount ?? 0;
 
-protected override void OnInit()
-{
-    base.OnInit();
-    state.GotNewStats += ReRender;
-}
+    protected override void OnInit()
+    {
+        base.OnInit();
+        if (state is object)
+        {
+            state.GotNewStats += ReRender;
+        }
+    }
 
-public void Dispose()
-{
-    state.GotNewStats -= ReRender;
-}
-void ReRender(object sender, EventArgs args)
-{
-    Invoke(StateHasChanged);
-}
+    public void Dispose()
+    {
+        if (state is object)
+        {
+            state.GotNewStats -= ReRender;
+        }
+    }
+    void ReRender(object sender, EventArgs args)
+    {
+        Invoke(StateHasChanged);
+    }
 }

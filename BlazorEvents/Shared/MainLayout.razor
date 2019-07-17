@@ -1,13 +1,27 @@
-@inherits LayoutComponentBase
+﻿@inherits LayoutComponentBase
 
-<div class="main">
-    <div class="top-row px-4">
-        <h3>Blazor Events - Action vs EventCallback</h3>
-        <small class="m-1">V1.0</small>
-        <a href="https://github.com/SQL-MisterMagoo/BlazorEventsDemo" target="_blank" class="ml-md-auto">Source</a>
+<BlazorEvents.Comps.ComponentStyle>
+    <div class="main">
+        <div class="top-row px-4">
+            <h3>Blazor Events - Action vs EventCallback</h3>
+            <small class="m-1">V1.0</small>
+            <a href="https://github.com/SQL-MisterMagoo/BlazorEventsDemo" target="_blank" class="ml-md-auto">Source</a>
+        </div>
+        <div class="row">
+            <ul class="nav flex-row align-items-center">
+                <li class="nav-item px-3">
+                    <NavLink class="nav-link" href="" Match="NavLinkMatch.All">Balls 🏀</NavLink>
+                </li>
+                <li class="nav-item px-3">
+                    <NavLink class="nav-link" href="sample2">Form 😪</NavLink>
+                </li>
+                <li class="nav-item px-3">
+                    <NavLink class="nav-link" href="sample3">Form 😃</NavLink>
+                </li>
+            </ul>
+        </div>
+        <div class="content px-4">
+            @Body
+        </div>
     </div>
-
-    <div class="content px-4">
-        @Body
-    </div>
-</div>
+</BlazorEvents.Comps.ComponentStyle>

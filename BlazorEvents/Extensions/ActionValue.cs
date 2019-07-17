@@ -1,27 +1,29 @@
-﻿using Microsoft.AspNetCore.Components;
+﻿/*
+ * Base class that implements a Value / ValueChanged parameter pair using Action<T>
+ */
+using Microsoft.AspNetCore.Components;
 using System;
 using System.Collections.Generic;
 
-namespace BlazorEvents.Comps
+namespace BlazorEvents
 {
-    public class CallbackValue<T> : ComponentBase
+    public class ActionValue<T> : EventComponentBase
     {
         private T _value { get; set; }
         [Parameter]
         protected T Value
         {
-            get =>_value;
+            get => _value;
             set
             {
                 var hasChanged = !EqualityComparer<T>.Default.Equals(value, _value);
                 if (hasChanged)
                 {
-                    Console.WriteLine($"Old:{_value} New:{value}");
                     _value = value;
-                    ValueChanged.InvokeAsync(value);
+                    ValueChanged?.Invoke(value);
                 }
             }
         }
-        [Parameter] protected EventCallback<T> ValueChanged { get; set; }
+        [Parameter] protected Action<T> ValueChanged { get; set; }
     }
 }

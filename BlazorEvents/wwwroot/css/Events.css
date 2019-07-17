@@ -1,4 +1,5 @@
-﻿.dot {
+﻿/* styles used for those stupid Balls that you click in sample1 */
+.dot {
     --bgval: 127;
     --bgcolor: hsl(var(--bgval),50%,100%);
     --bgcolor2: hsl(var(--bgval),80%,34%);

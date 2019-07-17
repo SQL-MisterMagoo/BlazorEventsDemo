@@ -1,0 +1,68 @@
+﻿@* 
+    This is the Foms example from the Blazor docs https://docs.microsoft.com/en-us/aspnet/core/blazor/forms-validation?view=aspnetcore-3.0
+    The only change is to wrap the components in my HighLighter component for visual effect.
+*@
+@inherits ComponentBase
+@page "/sample2"
+<BlazorEvents.Comps.StatsDisplay />
+
+<h1>Starfleet Starship Database (As per docs)</h1>
+
+<h2>New Ship Entry Form</h2>
+
+<EditForm Model="@starship" OnValidSubmit="@HandleValidSubmit">
+    <BlazorEvents.Comps.HighLighter><DataAnnotationsValidator /></BlazorEvents.Comps.HighLighter>
+    <BlazorEvents.Comps.HighLighter><ValidationSummary /></BlazorEvents.Comps.HighLighter>
+
+    <p>
+        <label for="identifier">Identifier: </label>
+        <BlazorEvents.Comps.HighLighter><InputText id="identifier" @bind-Value="starship.Identifier" /></BlazorEvents.Comps.HighLighter>
+    </p>
+    <p>
+        <label for="description">Description (optional): </label>
+        <BlazorEvents.Comps.HighLighter><InputTextArea Id="description" @bind-Value="starship.Description" /></BlazorEvents.Comps.HighLighter>
+    </p>
+    <p>
+        <label for="classification">Primary Classification: </label>
+        <BlazorEvents.Comps.HighLighter>
+            <InputSelect id="classification" @bind-Value="starship.Classification">
+                <option value="">Select classification ...</option>
+                <option value="Exploration">Exploration</option>
+                <option value="Diplomacy">Diplomacy</option>
+                <option value="Defense">Defense</option>
+            </InputSelect>
+        </BlazorEvents.Comps.HighLighter>
+    </p>
+    <p>
+        <label for="accommodation">Maximum Accommodation: </label>
+        <BlazorEvents.Comps.HighLighter>
+            <InputNumber id="accommodation"
+                         @bind-Value="starship.MaximumAccommodation" />
+        </BlazorEvents.Comps.HighLighter>
+    </p>
+    <p>
+        <label for="valid">Engineering Approval: </label>
+        <BlazorEvents.Comps.HighLighter><InputCheckbox id="valid" @bind-Value="starship.IsValidatedDesign" /></BlazorEvents.Comps.HighLighter>
+    </p>
+    <p>
+        <label for="productionDate">Production Date: </label>
+        <BlazorEvents.Comps.HighLighter><InputDate Id="productionDate" @bind-Value="starship.ProductionDate" /></BlazorEvents.Comps.HighLighter>
+    </p>
+
+    <button type="submit">Submit</button>
+
+    <p>
+        <a href="http://www.startrek.com/">Star Trek</a>,
+        &copy;1966-2019 CBS Studios, Inc. and
+        <a href="https://www.paramount.com">Paramount Pictures</a>
+    </p>
+</EditForm>
+
+@code {
+    private Starship starship = new Starship();
+
+    private void HandleValidSubmit()
+    {
+        Console.WriteLine("OnValidSubmit");
+    }
+}

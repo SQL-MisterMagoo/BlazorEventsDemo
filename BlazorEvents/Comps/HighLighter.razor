@@ -1,0 +1,12 @@
+@* This component can be used to wrap any content/component that cannot use EventComponentBase
+    
+    e.g. The MS supplied Input* components
+        <HighLighter><InputDate Id="productionDate" @bind-Value="starship.ProductionDate" /></HighLighter>
+
+    It will respond to render requests by flashing a yellow border 
+    and updating StatsState to keep count
+    Note that using this wrapper adds an effective 4px margin to the wrapped content.
+     - You can change this in the EventComponentBase where it adds the styling
+*@
+@inherits EventComponentBase
+@ChildContent

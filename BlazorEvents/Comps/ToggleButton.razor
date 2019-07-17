@@ -1,0 +1,28 @@
+@* 
+    A Boolean Valued Toggle button - that controls a value in AppState
+*@
+@inherits ComponentBase
+<label>@Title: @value</label>
+<button class="btn btn-primary" @onclick="@ToggleValue">@Caption</button>
+
+@code {
+[Parameter] protected string Title { get; set; }
+[Parameter] protected string Caption { get; set; }
+[Parameter] protected AppStateNames Name { get; set; }
+
+[Inject] AppState appState { get; set; }
+
+bool value;
+
+protected override void OnInit()
+{
+    base.OnInit();
+    appState.SetValue(Name, value);
+}
+
+void ToggleValue(UIMouseEventArgs a)
+{
+    value = !value;
+    appState.SetValue(Name,value);
+}
+}

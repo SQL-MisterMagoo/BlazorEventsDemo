@@ -1,0 +1,40 @@
+@* 
+    This component uses AppState as it's model - it reads and updates AppState but never directly notifies
+    a parent that anything has happened - relying instead on other interested parties to subscribe to AppState.GotNewState
+*@
+@implements IDisposable
+@inherits ComponentBase
+
+<label for="@appState.GetName(Name)">@Title: </label>
+<input type="@InputType" class="form-control" @bind-value="@Value" @bind-value:event="oninput" placeholder="@Title" />
+
+@code {
+[Parameter] protected string Title { get; set; }
+[Parameter] protected string InputType { get; set; }
+[Parameter] protected AppStateNames Name { get; set; }
+[Parameter] protected string Default { get; set; } = "";
+
+[Inject] AppState appState { get; set; }
+
+string Value { get => appState.GetValue(Name)?.ToString() ?? Default; set { int.TryParse(value, out int i); appState.SetValue(Name, i); } }
+
+protected override void OnInit()
+{
+    base.OnInit();
+    appState.GotNewState += GotNewState;
+}
+
+void GotNewState(object sender, AppStateNames ValueName)
+{
+    if (ValueName.Equals(Name))
+    {
+        Invoke(StateHasChanged);
+    }
+}
+
+public void Dispose()
+{
+    appState.GotNewState -= GotNewState;
+}
+}
+

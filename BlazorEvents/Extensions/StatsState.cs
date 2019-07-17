@@ -1,9 +1,12 @@
-﻿using System;
+﻿/*
+ * A simple State class used for collecting aggregate statistics on rendering calls
+ */
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace BlazorEvents.Comps
+namespace BlazorEvents
 {
     public class StatsState
     {

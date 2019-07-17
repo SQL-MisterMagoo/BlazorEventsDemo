@@ -1,7 +1,5 @@
-using BlazorEvents.Comps;
 using Microsoft.AspNetCore.Components.Builder;
 using Microsoft.Extensions.DependencyInjection;
-using System.Threading.Tasks;
 
 namespace BlazorEvents
 {

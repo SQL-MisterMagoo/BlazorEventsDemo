@@ -1,0 +1,58 @@
+﻿@inherits ComponentBase
+@page "/"
+
+<h3>Please don't use EventCallback ALL the time!</h3>
+<p>Click the balls - any EventCallback Balls will cause a full page re-render, while Action balls don't. Increase the number of balls to see a bigger effect. Add workload to simulate what happens if you have any async methods on the page.</p>
+<BlazorEvents.Comps.StatsDisplay />
+<BlazorEvents.Comps.ToggleButton Name="AppStateNames.WorkLoad" Title="Simulate Workload" Caption="Toggle Workload"/>
+<BlazorEvents.Comps.ToggleButton Name="AppStateNames.DisplayStats" Title="Display Stats" Caption="Toggle Stats"/>
+<BlazorEvents.Comps.IndependentInput InputType="@InputTypes.Number" Name="AppStateNames.BallCount" Title="Balls" Default="@buttonCount.ToString()"/>
+<div class="d-flex flex-wrap mt-1 p-1">
+    @for (int i = 0; i < buttonCount; i++)
+    {
+        int local = i;
+        if ((local % 2) == 0)
+        {
+            <BlazorEvents.Comps.ActionDot @bind-Value="@Colour[local]" />
+        }
+        else
+        {
+            <BlazorEvents.Comps.CallbackDot @bind-Value="@Colour[local]" />
+        }
+    }
+</div>
+@code
+{
+
+[Inject] StatsState statsState { get; set; }
+[Inject] AppState appState { get; set; }
+
+int buttonCount = 2;
+int[] Colour;
+
+protected override void OnInit()
+{
+    base.OnInit();
+    buttonCount = (int)(appState.GetValue(AppStateNames.BallCount) ?? 2);
+    appState.GotNewState += GotNewState;
+    Colour = Enumerable.Range(1, buttonCount).Select(i => i * 5).ToArray();
+}
+
+void GotNewState(object sender, AppStateNames Name)
+{
+    switch (Name)
+    {
+        case AppStateNames.BallCount:
+            buttonCount = (int)appState.GetValue(AppStateNames.BallCount);
+            if (buttonCount != Colour.Length)
+            {
+                Array.Resize(ref Colour, buttonCount);
+                Invoke(StateHasChanged);
+            }
+            break;
+        default:
+            break;
+    }
+}
+
+}

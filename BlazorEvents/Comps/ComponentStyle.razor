@@ -1,0 +1,35 @@
+@* 
+    Provides a cascading value that can be used to add custom styles to the page at runtime
+    The child component uses a CascadingParameter(Name="DynamicStyles") and calls AddStyle 
+    When that happens, this component re-renders and the dynamic page styles are updated.
+*@
+@inherits ComponentBase
+@if (DynamicStyles is object)
+{
+    <style>
+    @Styles
+    </style>
+}
+<CascadingValue Name="DynamicStyles" Value="DynamicStyles">
+    @ChildContent
+</CascadingValue>
+@code
+{
+    [Parameter] protected RenderFragment ChildContent { get; set; }
+
+    StyleContainer DynamicStyles = new StyleContainer();
+
+    protected override void OnInit()
+    {
+        base.OnInit();
+        DynamicStyles.StateHasChanged = () => Invoke(StateHasChanged);
+    }
+    string @Styles
+    {
+        get
+        {
+            return DynamicStyles.GetStyles();
+        }
+    }
+
+}

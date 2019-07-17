@@ -1,0 +1,83 @@
+﻿@*
+    This is the Foms example from the Blazor docs https://docs.microsoft.com/en-us/aspnet/core/blazor/forms-validation?view=aspnetcore-3.0
+    The two changes are to 
+    1. wrap the components in my HighLighter component for visual effect.
+    2. Prevent rendering of this page except for the initial render and onValidSubmit
+        In real life the code to decide when to render would likely need to be smarter
+*@
+@inherits ComponentBase
+@page "/sample3"
+
+<BlazorEvents.Comps.StatsDisplay />
+
+<h1>Starfleet Starship Database (With Re-Render Protection)</h1>
+
+<h2>New Ship Entry Form</h2>
+
+<EditForm Model="@starship" OnValidSubmit="@HandleValidSubmit">
+    <BlazorEvents.Comps.HighLighter><DataAnnotationsValidator /></BlazorEvents.Comps.HighLighter>
+    <BlazorEvents.Comps.HighLighter><ValidationSummary /></BlazorEvents.Comps.HighLighter>
+
+    <p>
+        <label for="identifier">Identifier: </label>
+        <BlazorEvents.Comps.HighLighter><InputText id="identifier" @bind-Value="starship.Identifier" /></BlazorEvents.Comps.HighLighter>
+    </p>
+    <p>
+        <label for="description">Description (optional): </label>
+        <BlazorEvents.Comps.HighLighter><InputTextArea Id="description" @bind-Value="starship.Description" /></BlazorEvents.Comps.HighLighter>
+    </p>
+    <p>
+        <label for="classification">Primary Classification: </label>
+        <BlazorEvents.Comps.HighLighter>
+            <InputSelect id="classification" @bind-Value="starship.Classification">
+                <option value="">Select classification ...</option>
+                <option value="Exploration">Exploration</option>
+                <option value="Diplomacy">Diplomacy</option>
+                <option value="Defense">Defense</option>
+            </InputSelect>
+        </BlazorEvents.Comps.HighLighter>
+    </p>
+    <p>
+        <label for="accommodation">Maximum Accommodation: </label>
+        <BlazorEvents.Comps.HighLighter>
+            <InputNumber id="accommodation"
+                         @bind-Value="starship.MaximumAccommodation" />
+        </BlazorEvents.Comps.HighLighter>
+    </p>
+    <p>
+        <label for="valid">Engineering Approval: </label>
+        <BlazorEvents.Comps.HighLighter><InputCheckbox id="valid" @bind-Value="starship.IsValidatedDesign" /></BlazorEvents.Comps.HighLighter>
+    </p>
+    <p>
+        <label for="productionDate">Production Date: </label>
+        <BlazorEvents.Comps.HighLighter><InputDate Id="productionDate" @bind-Value="starship.ProductionDate" /></BlazorEvents.Comps.HighLighter>
+    </p>
+
+    <button type="submit">Submit</button>
+
+    <p>
+        <a href="http://www.startrek.com/">Star Trek</a>,
+        &copy;1966-2019 CBS Studios, Inc. and
+        <a href="https://www.paramount.com">Paramount Pictures</a>
+    </p>
+</EditForm>
+
+@code {
+    private Starship starship = new Starship();
+    protected override void OnAfterRender()
+    {
+        base.OnAfterRender();
+        shouldRender = !shouldRender;
+    }
+    // Added to allow us to Prevent unneccessary rendering
+    private bool shouldRender = true; 
+
+    protected override bool ShouldRender()
+    {
+        return shouldRender;
+    }
+    private void HandleValidSubmit()
+    {
+        shouldRender = true;
+    }
+}
