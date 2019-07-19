@@ -1,4 +1,4 @@
-﻿@* 
+﻿@*
     This is the Foms example from the Blazor docs https://docs.microsoft.com/en-us/aspnet/core/blazor/forms-validation?view=aspnetcore-3.0
     The only change is to wrap the components in my HighLighter component for visual effect.
 *@
@@ -9,6 +9,7 @@
 <h1>Starfleet Starship Database (As per docs)</h1>
 
 <h2>New Ship Entry Form</h2>
+<p>Fill in the form - all controls use EventCallback and will cause a full page re-render. This is the example given in the official docs.</p>
 
 <EditForm Model="@starship" OnValidSubmit="@HandleValidSubmit">
     <BlazorEvents.Comps.HighLighter><DataAnnotationsValidator /></BlazorEvents.Comps.HighLighter>

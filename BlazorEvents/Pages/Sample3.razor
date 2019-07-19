@@ -1,6 +1,6 @@
 ﻿@*
     This is the Foms example from the Blazor docs https://docs.microsoft.com/en-us/aspnet/core/blazor/forms-validation?view=aspnetcore-3.0
-    The two changes are to 
+    The two changes are to
     1. wrap the components in my HighLighter component for visual effect.
     2. Prevent rendering of this page except for the initial render and onValidSubmit
         In real life the code to decide when to render would likely need to be smarter
@@ -13,6 +13,7 @@
 <h1>Starfleet Starship Database (With Re-Render Protection)</h1>
 
 <h2>New Ship Entry Form</h2>
+<p>Fill in the form - all controls use EventCallback but this page prevents a full re-render. This is an example not given in the official docs.</p>
 
 <EditForm Model="@starship" OnValidSubmit="@HandleValidSubmit">
     <BlazorEvents.Comps.HighLighter><DataAnnotationsValidator /></BlazorEvents.Comps.HighLighter>
@@ -70,7 +71,7 @@
         shouldRender = !shouldRender;
     }
     // Added to allow us to Prevent unneccessary rendering
-    private bool shouldRender = true; 
+    private bool shouldRender = true;
 
     protected override bool ShouldRender()
     {
