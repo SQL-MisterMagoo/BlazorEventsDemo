@@ -1,0 +1,17 @@
+﻿<Project>
+  <Target Name="CreateManifest" AfterTargets="AfterBuild">
+    <ItemGroup>
+      <IconFiles Include="$(MSBuildProjectDirectory)\wwwroot\images\*icon*192*.*;">
+        <Size>192x192</Size>
+        <Type>%(Extension->Replace(".",""))</Type>
+      </IconFiles>
+    </ItemGroup>
+    <PropertyGroup>
+      <Manifest>$(MSBuildProjectDirectory)\wwwroot\manifest.json</Manifest>
+    </PropertyGroup>
+    <ItemGroup>
+      <ManifestLines Include="@(IconFiles -> '{&quot;src&quot;: &quot;/%(identity)&quot;,&quot;type&quot;:&quot;image/%(Type)&quot;,&quot;size&quot;:&quot;%(Size)&quot;}',',')"/>
+    </ItemGroup>
+    <Message Importance="high" Text="@(ManifestLines)"/>
+  </Target>
+</Project>

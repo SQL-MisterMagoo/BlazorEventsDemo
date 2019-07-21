@@ -1,10 +1,10 @@
 {
-  "short_name": "{shortname}",
-  "name": "{longname}",
+  "short_name": "BlazorEvents",
+  "name": "Blazor Events PWA",
   "icons": [
     {
-      "src": "{icon-src-192}",
-      "type": "{icon-typ-192}",
+      "src": "/images/android-icon-192x192.png",
+      "type": "image/png",
       "sizes": "192x192"
     },
     {

@@ -24,4 +24,5 @@
   </ItemGroup>
 
   <Import Project="PWA\CreatePWA.target"/>
+  <Import Project="PWA\CreateManifest.target"/>
 </Project>

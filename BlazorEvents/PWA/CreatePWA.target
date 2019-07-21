@@ -4,7 +4,6 @@
     <ItemGroup>
       <DistFiles Include="$(OutputPath)\dist\**\*.*;" />
       <DistFiles Include="$(MsBuildProjectDirectory)\wwwroot\**\*.*;" />
-      <IconFiles Include="$(MsBuildProjectDirectory)\wwwroot\**\*icon*.*;" />
       <TemplateLines Include="$([System.IO.File]::ReadAllText($(MsBuildProjectDirectory)\PWA\ServiceWorkerTemplate$(PWAType).js))"/>
     </ItemGroup>
     <PropertyGroup>
