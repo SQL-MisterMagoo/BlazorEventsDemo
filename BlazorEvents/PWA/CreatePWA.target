@@ -1,0 +1,20 @@
+﻿<Project>
+  <Target Name="CreatePWA" AfterTargets="AfterBuild" Condition="'$(PWAType)'!='' AND '$(PWACacheName)'!='' AND '$(PWACacheVersion)'!=''">
+    <Message Importance="high" Text="Building PWA: Type: $(PWAType) CacheName: $(PWACacheName) CacheVersion: $(PWACacheVersion)"/>
+    <ItemGroup>
+      <DistFiles Include="$(OutputPath)\dist\**\*.*;" />
+      <DistFiles Include="$(MsBuildProjectDirectory)\wwwroot\**\*.*;" />
+      <IconFiles Include="$(MsBuildProjectDirectory)\wwwroot\**\*icon*.*;" />
+      <TemplateLines Include="$([System.IO.File]::ReadAllText($(MsBuildProjectDirectory)\PWA\ServiceWorkerTemplate$(PWAType).js))"/>
+    </ItemGroup>
+    <PropertyGroup>
+      <CacheLine>const staticCacheName = '$(PWACacheName)-v$(PWACacheVersion)'%3B</CacheLine>
+      <ServiceWorker>$(MsBuildProjectDirectory)\wwwroot\ServiceWorker.js</ServiceWorker>
+    </PropertyGroup>
+    <WriteLinesToFile File="$(ServiceWorker)" Overwrite="true" Lines="const filesToCache = [;" />
+    <WriteLinesToFile File="$(ServiceWorker)" Overwrite="false" 
+      Lines="@(DistFiles -> '&quot;/%(RecursiveDir)%(FileName)%(Extension)&quot;'->Replace('\','/'),',%0D%0A');]%3B;" />
+    <WriteLinesToFile File="$(ServiceWorker)" Overwrite="false" Lines="$(CacheLine)" />
+    <WriteLinesToFile File="$(ServiceWorker)" Overwrite="false" Lines="@(TemplateLines);" />
+  </Target>
+</Project>
