@@ -45,10 +45,9 @@ const filesToCache = [
 "/css/site.css",
 "/images/android-icon-192x192.png",
 "/images/android-icon-512x512.png",
+"/index - Copy.html",
 "/index.html",
-"/manifest.json",
 "/sample-data/weather.json",
-"/ServiceWorker.js",
 "/ServiceWorkerRegister.js"
 ];
 const staticCacheName = 'cache-blazorevents-v1';

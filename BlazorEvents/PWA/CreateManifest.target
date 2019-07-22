@@ -1,17 +1,44 @@
 ﻿<Project>
-  <Target Name="CreateManifest" AfterTargets="AfterBuild">
+  <PropertyGroup>
+    <ManifestFile>$(MSBuildProjectDirectory)\wwwroot\manifest.json</ManifestFile>
+    <BaseUrl Condition="'$(BaseUrl)'==''">/</BaseUrl>
+    <ManifestForce>true</ManifestForce>
+  </PropertyGroup>
+  <Target Name="CreateManifest" AfterTargets="AfterBuild" Condition="!Exists('$(ManifestFile)') Or '$(ManifestForce)'=='true'">
+    <Message Importance="high" Text="Building Manifest $(ManifestFile)" Condition="!Exists('$(ManifestFile)')"/>
+    <Message Importance="high" Text="Re-Building Manifest $(ManifestFile)" Condition="Exists('$(ManifestFile)')"/>
     <ItemGroup>
-      <IconFiles Include="$(MSBuildProjectDirectory)\wwwroot\images\*icon*192*.*;">
+      <IconFiles Include="$(MSBuildProjectDirectory)\wwwroot\**\*icon*192*.*;">
         <Size>192x192</Size>
-        <Type>%(Extension->Replace(".",""))</Type>
       </IconFiles>
+      <IconFiles Include="$(MSBuildProjectDirectory)\wwwroot\**\*icon*512*.*;">
+        <Size>512x512</Size>
+      </IconFiles>
+      <ManifestText Include="{
+  &quot;short_name&quot;: &quot;$(SolutionName)&quot;,
+  &quot;name&quot;: &quot;$(ProjectName)&quot;,
+  &quot;start_url&quot;: &quot;$(BaseUrl)&quot;,
+  &quot;display&quot;: &quot;standalone&quot;,
+  "/>
+      <ManifestText Include="%20%20&quot;icons&quot;: ["/>
+      <ManifestText Include="@(IconFiles-> '    {
+      &quot;src&quot;:&quot;/%(RecursiveDir)%(Filename)%(Extension)&quot;,
+      &quot;type&quot;:&quot;image/%(Extension)&quot;,
+      &quot;sizes&quot;:&quot;%(Size)&quot;
+    }'->Replace('/.','/')->Replace('\','/'),',%0D%0A');%20%20];}"/>
     </ItemGroup>
+    <WriteLinesToFile File="$(ManifestFile)" Overwrite="true" Lines="@(ManifestText);" />
+    <!-- Add manifest to index.html -->
     <PropertyGroup>
-      <Manifest>$(MSBuildProjectDirectory)\wwwroot\manifest.json</Manifest>
+      <IndexFile>$(MsBuildProjectDirectory)\wwwroot\index.html</IndexFile>
+      <IndexLines>$([System.IO.File]::ReadAllText($(IndexFile)))</IndexLines>
     </PropertyGroup>
-    <ItemGroup>
-      <ManifestLines Include="@(IconFiles -> '{&quot;src&quot;: &quot;/%(identity)&quot;,&quot;type&quot;:&quot;image/%(Type)&quot;,&quot;size&quot;:&quot;%(Size)&quot;}',',')"/>
-    </ItemGroup>
-    <Message Importance="high" Text="@(ManifestLines)"/>
+    <Message Importance="high" Text="Adding manifest to $(IndexFile)"
+      Condition="'$(IndexLines.Contains(rel=&quot;manifest&quot;))'=='false'"/>
+    <WriteLinesToFile 
+      File="$(IndexFile)" 
+      Overwrite="true" 
+      Lines="$(IndexLines.Replace('&lt;/head&gt;','    &lt;link href=&quot;/manifest.json&quot; rel=&quot;manifest&quot;/&gt;%0D%0A&lt;/head&gt;'))"
+      Condition="'$(IndexLines.Contains(rel=&quot;manifest&quot;))'=='false'"/>
   </Target>
 </Project>
