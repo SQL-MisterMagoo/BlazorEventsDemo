@@ -30,9 +30,9 @@
 int buttonCount = 2;
 int[] Colour;
 
-protected override void OnInit()
+protected override void OnInitialized()
 {
-    base.OnInit();
+    base.OnInitialized();
     buttonCount = (int)(appState.GetValue(AppStateNames.BallCount) ?? 2);
     appState.GotNewState += GotNewState;
     Colour = Enumerable.Range(1, buttonCount).Select(i => i * 5).ToArray();
@@ -47,7 +47,7 @@ void GotNewState(object sender, AppStateNames Name)
             if (buttonCount != Colour.Length)
             {
                 Array.Resize(ref Colour, buttonCount);
-                Invoke(StateHasChanged);
+                InvokeAsync(StateHasChanged);
             }
             break;
         default:

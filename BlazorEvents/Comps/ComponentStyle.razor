@@ -15,14 +15,14 @@
 </CascadingValue>
 @code
 {
-    [Parameter] protected RenderFragment ChildContent { get; set; }
+    [Parameter] public RenderFragment ChildContent { get; set; }
 
     StyleContainer DynamicStyles = new StyleContainer();
 
-    protected override void OnInit()
+    protected override void OnInitialized()
     {
-        base.OnInit();
-        DynamicStyles.StateHasChanged = () => Invoke(StateHasChanged);
+        base.OnInitialized();
+        DynamicStyles.StateHasChanged = () => InvokeAsync(StateHasChanged);
     }
     string @Styles
     {

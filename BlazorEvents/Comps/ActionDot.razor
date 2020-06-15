@@ -27,15 +27,15 @@
     int clickCount;
     Random rng = new Random();
 
-    protected Task Clicked(UIMouseEventArgs args)
+    protected Task Clicked(MouseEventArgs args)
     {
         clickCount++;
         Value = Value + 1;
         return Task.CompletedTask;
     }
-    protected override void OnInit()
+    protected override void OnInitialized()
     {
-        base.OnInit();
+        base.OnInitialized();
         appState.GotNewState += AppStateChanged;
     }
     void AppStateChanged(object sender, AppStateNames name)
@@ -47,16 +47,16 @@
                 break;
             case AppStateNames.DisplayStats:
                 displayStats = (bool)appState.GetValue(AppStateNames.DisplayStats);
-                Invoke(StateHasChanged);
+                InvokeAsync(StateHasChanged);
                 break;
             default:
                 break;
         }
     }
 
-    protected override void OnAfterRender()
+    protected override void OnAfterRender(bool firstRender)
     {
-        base.OnAfterRender();
+        base.OnAfterRender(firstRender);
         actualRender++;
     }
     protected override bool ShouldRender()

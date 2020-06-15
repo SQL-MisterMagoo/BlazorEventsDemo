@@ -3,24 +3,24 @@
 *@
 @inherits ComponentBase
 <label>@Title: @value</label>
-<button class="btn btn-primary" @onclick="@ToggleValue">@Caption</button>
+<button class="btn btn-primary" @onclick=ToggleValue>@Caption</button>
 
 @code {
-[Parameter] protected string Title { get; set; }
-[Parameter] protected string Caption { get; set; }
-[Parameter] protected AppStateNames Name { get; set; }
+[Parameter] public string Title { get; set; }
+[Parameter] public string Caption { get; set; }
+[Parameter] public AppStateNames Name { get; set; }
 
 [Inject] AppState appState { get; set; }
 
 bool value;
 
-protected override void OnInit()
+protected override void OnInitialized()
 {
-    base.OnInit();
+    base.OnInitialized();
     appState.SetValue(Name, value);
 }
 
-void ToggleValue(UIMouseEventArgs a)
+void ToggleValue(MouseEventArgs a)
 {
     value = !value;
     appState.SetValue(Name,value);

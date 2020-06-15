@@ -6,21 +6,21 @@
 @inherits ComponentBase
 
 <label for="@appState.GetName(Name)">@Title: </label>
-<input type="@InputType" class="form-control" @bind-value="@Value" @bind-value:event="oninput" placeholder="@Title" />
+<input type=@InputType class="form-control" @bind-value="@Value" @bind-value:event="oninput" placeholder="@Title" />
 
 @code {
-[Parameter] protected string Title { get; set; }
-[Parameter] protected string InputType { get; set; }
-[Parameter] protected AppStateNames Name { get; set; }
-[Parameter] protected string Default { get; set; } = "";
+[Parameter] public string Title { get; set; }
+[Parameter] public string InputType { get; set; }
+[Parameter] public AppStateNames Name { get; set; }
+[Parameter] public string Default { get; set; } = "";
 
 [Inject] AppState appState { get; set; }
 
 string Value { get => appState.GetValue(Name)?.ToString() ?? Default; set { int.TryParse(value, out int i); appState.SetValue(Name, i); } }
 
-protected override void OnInit()
+protected override void OnInitialized()
 {
-    base.OnInit();
+    base.OnInitialized();
     appState.GotNewState += GotNewState;
 }
 
@@ -28,7 +28,7 @@ void GotNewState(object sender, AppStateNames ValueName)
 {
     if (ValueName.Equals(Name))
     {
-        Invoke(StateHasChanged);
+        InvokeAsync(StateHasChanged);
     }
 }
 

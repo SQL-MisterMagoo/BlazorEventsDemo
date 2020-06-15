@@ -2,7 +2,7 @@
     This component simply listens for updates to the StatsState and displays them    
 *@
 @implements IDisposable
-@inherits ComponentBase
+@inherits EventComponentBase
 
 <h3>Calls to ShouldRender: @ShouldRenderCount</h3>
 <h3>Calls to Render: @DidRenderCount</h3>
@@ -13,9 +13,10 @@
     private int ShouldRenderCount => state?.ShouldRenderCount ?? 0;
     private int DidRenderCount => state?.DidRenderCount ?? 0;
 
-    protected override void OnInit()
+    protected override void OnInitialized()
     {
-        base.OnInit();
+        base.OnInitialized();
+        ConsoleOutput = true;
         if (state is object)
         {
             state.GotNewStats += ReRender;
@@ -31,6 +32,6 @@
     }
     void ReRender(object sender, EventArgs args)
     {
-        Invoke(StateHasChanged);
+        //InvokeAsync(StateHasChanged);
     }
 }

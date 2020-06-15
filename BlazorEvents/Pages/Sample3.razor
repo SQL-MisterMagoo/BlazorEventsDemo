@@ -65,9 +65,9 @@
 
 @code {
     private Starship starship = new Starship();
-    protected override void OnAfterRender()
+    protected override void OnAfterRender(bool firstRender)
     {
-        base.OnAfterRender();
+        base.OnAfterRender(firstRender);
         shouldRender = !shouldRender;
     }
     // Added to allow us to Prevent unneccessary rendering

@@ -11,7 +11,7 @@ namespace BlazorEvents
     {
         private T _value { get; set; }
         [Parameter]
-        protected T Value
+        public T Value
         {
             get => _value;
             set
@@ -24,6 +24,6 @@ namespace BlazorEvents
                 }
             }
         }
-        [Parameter] protected Action<T> ValueChanged { get; set; }
+        [Parameter] public Action<T> ValueChanged { get; set; }
     }
 }
